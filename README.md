@@ -1,3 +1,9 @@
+Based on the package: http://onefinestay.github.io/react-daterange-picker/
+Updated to use the most recent version of react
+
+Probably won't get round to fully converting this to next, but thought it'd be worth upgrading the original at least.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
