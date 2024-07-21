@@ -36,5 +36,21 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "typescript": "^5"
-  }
+  },
+  "description": "Based on the package: http://onefinestay.github.io/react-daterange-picker/ Updated to use the most recent version of react",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OliverSheldon/next-daterange-picker.git"
+  },
+  "keywords": [
+    "next",
+    "nextjs",
+    "daterange",
+    "datepicker"
+  ],
+  "author": "ohsheldon",
+  "bugs": {
+    "url": "https://github.com/OliverSheldon/next-daterange-picker/issues"
+  },
+  "homepage": "https://github.com/OliverSheldon/next-daterange-picker#readme"
 }
