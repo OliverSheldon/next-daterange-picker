@@ -1,7 +1,12 @@
 {
   "name": "next-daterange-picker",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "@ohsheldon:registry": "https://npm.pkg.github.com"
+  },
+  "license": "Apache-2.0",
+  "main": "app/components/range-picker/DateRangePicker.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
