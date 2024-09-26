@@ -1,8 +1,7 @@
 import areMomentRangesEqual from './areMomentRangesEqual';
 import areMomentValuesEqual from './areMomentValuesEqual';
 
-export default function (previousProps, nextProps) {
-  const previousValue = previousProps.value;
+export default function (previousValue, nextProps) {
   const nextValue = nextProps.value;
 
   return !(

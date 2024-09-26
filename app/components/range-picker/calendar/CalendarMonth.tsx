@@ -10,18 +10,29 @@ import calendar from 'calendar'
 import isMomentRange from '../utils/isMomentRange';
 
 type propTypes = {
+  bemBlock: string,
+  bemNamespace: string | null,
   dateComponent: ReactNode,
   disableNavigation: boolean,
   enabledRange: DateRange,
   firstOfMonth: Moment.Moment,
   firstOfWeek: number,
   hideSelection: boolean,
-  highlightedDate: DateRange & Moment.Moment,
-  highlightedRange: DateRange & Moment.Moment,
+  highlightedDate: (DateRange & Moment.Moment) | null,
+  highlightedRange: DateRange,
   onMonthChange: Function,
   onYearChange: Function,
-  value: DateRange,
-  locale: string
+  value: DateRange | moment.Moment | null,
+  locale: string,
+  dateStates: Immutable.List<Immutable.Map<string, any>>,
+  index: number,
+  selectionType: "single" | "range",
+  maxIndex: number,
+  onSelectDate: Function,
+  onHighlightDate: Function,
+  onUnHighlightDate: Function,
+  dateRangesForDate: Function,
+  className: string
 }
 
 let WEEKDAYS: List<[string, string]> = Immutable.List(moment.weekdays()).zip(Immutable.List(moment.weekdaysShort()));
@@ -36,14 +47,15 @@ function CalendarMonth(props : propTypes){
     let isSelectedDate;
     let isSelectedRangeStart;
     let isSelectedRangeEnd;
+    let val = props.value as DateRange;
 
     if (!props.hideSelection && props.value && moment.isMoment(props.value) && props.value.isSame(d, 'day')) {
       isSelectedDate = true;
-    } else if (!props.hideSelection && props.value && isMomentRange(props.value) && props.value.contains(d)) {
+    } else if (!props.hideSelection && props.value && isMomentRange(props.value) && val.contains(d)) {
       isInSelectedRange = true;
-
-      isSelectedRangeStart = props.value.start.isSame(d, 'day');
-      isSelectedRangeEnd = props.value.end.isSame(d, 'day');
+      
+      isSelectedRangeStart = val.start.isSame(d, 'day');
+      isSelectedRangeEnd = val.end.isSame(d, 'day');
     }
 
     return (
