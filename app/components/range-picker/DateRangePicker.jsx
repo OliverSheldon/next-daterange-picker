@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
+import * as Props from 'react-immutable-proptypes';
 import createClass from 'create-react-class';
 import moment from './moment-range';
 import Immutable from 'immutable';
@@ -34,7 +35,7 @@ const DateRangePicker = createClass({
     bemBlock: PropTypes.string,
     bemNamespace: PropTypes.string,
     className: PropTypes.string,
-    dateStates: PropTypes.array, // an array of date ranges and their states
+    dateStates: Props.list, // an array of date ranges and their states
     defaultState: PropTypes.string,
     disableNavigation: PropTypes.bool,
     firstOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
@@ -58,7 +59,7 @@ const DateRangePicker = createClass({
     singleDateRange: PropTypes.bool,
     showLegend: PropTypes.bool,
     stateDefinitions: PropTypes.object,
-    value: CustomPropTypes.momentOrMomentRange,
+    value: CustomPropTypes.momentOrMomentRange
   },
 
   getDefaultProps() {
@@ -267,7 +268,6 @@ const DateRangePicker = createClass({
   },
 
   onSelectDate(date) {
-    console.log('state: ',this.state)
     let {selectionType} = this.props;
     let {selectedStartDate} = this.state;
 

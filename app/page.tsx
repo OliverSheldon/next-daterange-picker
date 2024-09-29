@@ -1,7 +1,6 @@
 'use client'
 import * as Moment from 'moment';
-import { extendMoment } from 'moment-range';
-
+import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
 /* import Main from './components/example/code-snippets/main'
 import I18n from './components/example/code-snippets/i18n' */
@@ -18,6 +17,7 @@ import DatePickerSingle from './components/example/DatePickerSingle';
 import DatePickerSingleWithSetDateButtons from './components/example/DatePickerSingleWithSetDateButtons';
 import DatePickerRangeWithSetRangeButtons from './components/example/DatePickerRangeWithSetRangeButtons';
 import { useState } from 'react';
+import DateRangePicker from './components/range-picker/DateRangePicker';
 
 const today = moment();
 
@@ -32,8 +32,18 @@ function processCodeSnippet(src : string) {
 //var mainCodeSnippet = fs.readFileSync(__dirname + '/code-snippets/main.jsx', 'utf8');
 //var i18nCodeSnippet = fs.readFileSync(__dirname + '/code-snippets/i18n.jsx', 'utf8');
 
+const initialStart = moment().add(1, 'weeks').startOf('day');
+const initialEnd = moment().add(1, 'weeks').add(3, 'days').startOf('day');
+
 export default function Home() {
   const [locale, setLocale] = useState('en');
+  let [pickerValue, setPickerValue] = useState<moment.Moment | DateRange>(moment.range(initialStart, initialEnd))
+  let [pickerStates, setPickerStates] = useState<any>()
+
+  function onSelect(value: moment.Moment | DateRange, states: any ){
+    setPickerValue(value);
+    setPickerStates(states);
+  }
 
   function _selectLocale() {
     const loc = locale;
@@ -67,8 +77,7 @@ export default function Home() {
     }
   ];
 
-  const initialStart = moment().add(1, 'weeks').startOf('day');
-  const initialEnd = moment().add(1, 'weeks').add(3, 'days').startOf('day');
+  
 
   return (
     <main>
@@ -77,21 +86,32 @@ export default function Home() {
 
       <div className="content">
         <div className="example">
-          <DatePickerRange
-            firstOfWeek={1}
-            numberOfCalendars={2}
-            selectionType='range'
-            singleDateRange={true}
-            minimumDate={new Date()}
-            maximumDate={moment().add(2, 'years').toDate()}
-            stateDefinitions={stateDefinitions}
-            dateStates={dateRanges}
-            defaultState="available"
-            value={moment.range(initialStart, initialEnd)}
-            showLegend={true}
-            className="DatePickerRange"
-            />
+        <DateRangePicker
+          firstOfWeek={1}
+          numberOfCalendars={2}
+          selectionType='range'
+          singleDateRange={true}
+          minimumDate={new Date()}
+          maximumDate={moment().add(2, 'years').toDate()}
+          stateDefinitions={stateDefinitions}
+          dateStates={dateRanges}
+          defaultState="available"
+          value={pickerValue}
+          showLegend={true}
+          className="DatePickerRange"
+          onSelect={setPickerValue}
+        />
         </div>
+        <div>
+                        <input type="text"
+                            value={Moment.isMoment(pickerValue) ? pickerValue.format('LL') : pickerValue ? pickerValue.start.format('LL') : ""}
+                            readOnly={true}
+                            placeholder="Start date"/>
+                        <input type="text"
+                            value={Moment.isMoment(pickerValue) ? pickerValue.format('LL') : pickerValue ? pickerValue.end.format('LL') : ""}
+                            readOnly={true}
+                            placeholder="End date" />
+                    </div>
 
         <Features />
         <Install />

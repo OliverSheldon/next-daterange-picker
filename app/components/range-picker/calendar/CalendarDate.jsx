@@ -52,8 +52,6 @@ const CalendarDate = createClass({
 
   componentWillUnmount() {
     this.isUnmounted = true;
-    document.removeEventListener('mouseup', this.mouseUp);
-    document.removeEventListener('touchend', this.touchEnd);
   },
 
   mouseUp() {
@@ -68,16 +66,14 @@ const CalendarDate = createClass({
         mouseDown: false,
       });
     }
-
-    document.removeEventListener('mouseup', this.mouseUp);
+    //console.log('mouseup: false')
   },
 
   mouseDown() {
     this.setState({
       mouseDown: true,
     });
-
-    document.addEventListener('mouseup', this.mouseUp);
+    //console.log('mousedown: true')
   },
 
   touchEnd() {
@@ -94,7 +90,6 @@ const CalendarDate = createClass({
         mouseDown: false,
       });
     }
-    document.removeEventListener('touchend', this.touchEnd);
   },
 
   touchStart(event) {
@@ -102,7 +97,6 @@ const CalendarDate = createClass({
     this.setState({
       mouseDown: true,
     });
-    document.addEventListener('touchend', this.touchEnd);
   },
 
   mouseEnter() {
@@ -112,10 +106,11 @@ const CalendarDate = createClass({
   mouseLeave() {
     if (this.state.mouseDown) {
       this.props.onSelectDate(this.props.date);
-
-      this.setState({
+      //console.log('mouseLeave', this.props.date)
+       this.setState({
         mouseDown: false,
       });
+      //console.log('mouseLeave - mousedown false',)
     }
     this.props.onUnHighlightDate(this.props.date);
   },
@@ -228,7 +223,8 @@ const CalendarDate = createClass({
         onTouchStart={this.touchStart}
         onMouseEnter={this.mouseEnter}
         onMouseLeave={this.mouseLeave}
-        onMouseDown={this.mouseDown}>
+        onMouseDown={this.mouseDown}
+        onMouseUp={this.mouseUp}>
         {numStates > 1 &&
           <div className={this.cx({element: "HalfDateStates"})}>
             <CalendarDatePeriod period="am" color={amColor} />

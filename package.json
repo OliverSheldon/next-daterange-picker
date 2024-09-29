@@ -1,16 +1,17 @@
 {
-  "name": "@ohsheldon/next-daterange-picker",
-  "version": "0.1.0",
+  "name": "next-daterange-picker",
+  "version": "0.1.15",
   "private": false,
   "publishConfig": {
-    "@ohsheldon:registry": "https://npm.pkg.github.com"
+    "@ohsheldon:registry": "https://registry.npmjs.org"
   },
   "license": "Apache-2.0",
-  "main": "app/components/range-picker/DateRangePicker.js",
+  "main": "app/components/range-picker/index",
+  "types": "app/components/range-picker/index",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "next lint",
     "test": ""
   },
@@ -18,7 +19,6 @@
     "calendar": "^0.1.1",
     "classnames": "^2.5.1",
     "create-react-class": "^15.7.0",
-    "immutable": "^4.3.6",
     "moment": "^2.30.1",
     "moment-range": "^4.0.2",
     "next": "14.2.5",
@@ -26,6 +26,7 @@
     "react": "^18",
     "react-addons-pure-render-mixin": "^15.6.3",
     "react-dom": "^18",
+    "react-immutable-proptypes": "^2.2.0",
     "sass": "^1.77.8",
     "timekeeper": "^2.3.1",
     "underscore": "^1.13.6"
