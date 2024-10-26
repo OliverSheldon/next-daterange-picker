@@ -1,13 +1,13 @@
 {
   "name": "next-daterange-picker",
-  "version": "0.1.15",
+  "version": "1.0.0",
   "private": false,
   "publishConfig": {
     "@ohsheldon:registry": "https://registry.npmjs.org"
   },
   "license": "Apache-2.0",
-  "main": "app/components/range-picker/index",
-  "types": "app/components/range-picker/index",
+  "main": "app/components/picker",
+  "types": "app/components/picker",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,19 +17,12 @@
   },
   "dependencies": {
     "calendar": "^0.1.1",
-    "classnames": "^2.5.1",
-    "create-react-class": "^15.7.0",
     "moment": "^2.30.1",
     "moment-range": "^4.0.2",
-    "next": "14.2.5",
-    "prop-types": "^15.8.1",
+    "next": "14.2.13",
     "react": "^18",
-    "react-addons-pure-render-mixin": "^15.6.3",
     "react-dom": "^18",
-    "react-immutable-proptypes": "^2.2.0",
-    "sass": "^1.77.8",
-    "timekeeper": "^2.3.1",
-    "underscore": "^1.13.6"
+    "sass": "^1.79.3"
   },
   "devDependencies": {
     "@types/calendar": "^0.1.4",
@@ -38,7 +31,7 @@
     "@types/react-dom": "^18",
     "typescript": "^5"
   },
-  "description": "Based on the package: http://onefinestay.github.io/react-daterange-picker/ Updated to use the most recent version of react",
+  "description": "A date range picker built using nextjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/OliverSheldon/next-daterange-picker.git"

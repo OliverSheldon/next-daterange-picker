@@ -1,187 +1,50 @@
 'use client'
+
+import { useState } from "react";
 import * as Moment from 'moment';
 import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
-/* import Main from './components/example/code-snippets/main'
-import I18n from './components/example/code-snippets/i18n' */
-import timekeeper from 'timekeeper';
-import Header from './components/example/header';
-import Footer from './components/example/footer';
-import GithubRibbon from './components/example/github-ribbon';
-//import CodeSnippet from './components/example/code-snippet';
-import Install from './components/example/install';
-import Features from './components/example/features';
+import Month from "./components/Month";
+import Calendar from "./components/Calendar";
 
-import DatePickerRange from './components/example/DatePickerRange';
-import DatePickerSingle from './components/example/DatePickerSingle';
-import DatePickerSingleWithSetDateButtons from './components/example/DatePickerSingleWithSetDateButtons';
-import DatePickerRangeWithSetRangeButtons from './components/example/DatePickerRangeWithSetRangeButtons';
-import { useState } from 'react';
-import DateRangePicker from './components/range-picker/DateRangePicker';
-
-const today = moment();
-
-timekeeper.freeze(new Date('2024-07-01'));
-
-function processCodeSnippet(src : string) {
-  var lines = src.split('\n');
-  lines.splice(0, 3);
-  return lines.join('\n');
+type DateStates = {
+  state: string,
+  range: DateRange
 }
 
-//var mainCodeSnippet = fs.readFileSync(__dirname + '/code-snippets/main.jsx', 'utf8');
-//var i18nCodeSnippet = fs.readFileSync(__dirname + '/code-snippets/i18n.jsx', 'utf8');
-
-const initialStart = moment().add(1, 'weeks').startOf('day');
-const initialEnd = moment().add(1, 'weeks').add(3, 'days').startOf('day');
+type Dates = {
+  start: Date,
+  end: Date
+}
 
 export default function Home() {
-  const [locale, setLocale] = useState('en');
-  let [pickerValue, setPickerValue] = useState<moment.Moment | DateRange>(moment.range(initialStart, initialEnd))
-  let [pickerStates, setPickerStates] = useState<any>()
+  let [dates, setDates] = useState<Dates>({start: new Date(), end: new Date()})
 
-  function onSelect(value: moment.Moment | DateRange, states: any ){
-    setPickerValue(value);
-    setPickerStates(states);
-  }
 
-  function _selectLocale() {
-    const loc = locale;
-    if (loc !== 'en') {
-      require(`moment/locale/${loc}`);
-    }
-    moment.locale(loc);
-  
-    setLocale(loc)
-  }
-
-  const stateDefinitions = {
-    available: {
-      color: '#ffffff',
-      label: 'Available',
-    },
-    unavailable: {
-      selectable: false,
-      color: '#78818b',
-      label: 'Unavailable',
-    },
-  };
-
-  const dateRanges = [
+  let dateStates: DateStates[] = [
     {
       state: 'unavailable',
       range: moment.range(
-        moment().add(3, 'weeks'),
-        moment().add(3, 'weeks').add(5, 'days')
+        moment().add(2, 'weeks').startOf('day'),
+        moment().add(2, 'weeks').add(5, 'days').endOf('day')
+      ),
+    },
+    {
+      state: 'unavailable',
+      range: moment.range(
+        moment().add(3, 'weeks').add(1, 'days').startOf('day'),
+        moment().add(3, 'weeks').add(5, 'days').endOf('day')
       ),
     }
-  ];
-
-  
+  ]
 
   return (
-    <main>
-      <Header />
-      <GithubRibbon />
-
-      <div className="content">
-        <div className="example">
-        <DateRangePicker
-          firstOfWeek={1}
-          numberOfCalendars={2}
-          selectionType='range'
-          singleDateRange={true}
-          minimumDate={new Date()}
-          maximumDate={moment().add(2, 'years').toDate()}
-          stateDefinitions={stateDefinitions}
-          dateStates={dateRanges}
-          defaultState="available"
-          value={pickerValue}
-          showLegend={true}
-          className="DatePickerRange"
-          onSelect={setPickerValue}
-        />
-        </div>
-        <div>
-                        <input type="text"
-                            value={Moment.isMoment(pickerValue) ? pickerValue.format('LL') : pickerValue ? pickerValue.start.format('LL') : ""}
-                            readOnly={true}
-                            placeholder="Start date"/>
-                        <input type="text"
-                            value={Moment.isMoment(pickerValue) ? pickerValue.format('LL') : pickerValue ? pickerValue.end.format('LL') : ""}
-                            readOnly={true}
-                            placeholder="End date" />
-                    </div>
-
-        <Features />
-        <Install />
-
-        <div className="examples">
-          <h2>Examples</h2>
-
-          <div className="example">
-            <h4>Range with no date states</h4>
-            <DatePickerRange
-              numberOfCalendars={2}
-              selectionType="range"
-              minimumDate={new Date()} />
-          </div>
-
-          <div className="example">
-            <h4>Range with day-long ranges allowed</h4>
-            <DatePickerRange
-              numberOfCalendars={2}
-              selectionType="range"
-              singleDateRange={true}
-              minimumDate={new Date()} />
-          </div>
-
-          <div className="example">
-            <h4>Single with no date states</h4>
-            <DatePickerSingle
-              numberOfCalendars={2}
-              selectionType="single"
-              minimumDate={new Date()} />
-          </div>
-
-          <div className="example">
-            <h4>
-              i18n support based on moment/locale &nbsp;&nbsp;
-              <select onChange={_selectLocale} name="locale" id="locale">
-                <option value="en">EN</option>
-                <option value="ar-sa">AR</option>
-                <option value="fr">FR</option>
-                <option value="it">IT</option>
-                <option value="es">ES</option>
-                <option value="de">DE</option>
-                <option value="ru">RU</option>
-              </select>
-            </h4>
-            <DatePickerRange
-              locale={locale}
-              numberOfCalendars={2}
-              selectionType="range"
-              minimumDate={new Date()} />
-          </div>
-
-          <div className="example">
-            <h4>Setting Calendar Externally</h4>
-            <DatePickerSingleWithSetDateButtons
-              numberOfCalendars={1}
-              selectionType="single"
-              />
-          </div>
-
-          <div className="example">
-            <h4>Setting Calendar Range Externally</h4>
-            <DatePickerRangeWithSetRangeButtons
-              numberOfCalendars={2}
-              selectionType="range"
-              />
-          </div>
-        </div>
+    <>
+      <Calendar getSelectedDates={setDates} dateStates={dateStates}/>
+      <div style={{width: "500px",display: "flex", justifyContent: "space-between"}}>
+        <input style={{width: "calc(34px*7)", boxSizing: "border-box", padding: "5px"}} type="date" defaultValue={dates.start ? moment(dates.start).format('yyyy-MM-DD') : ''}/>
+        <input style={{width: "calc(34px*7)", boxSizing: "border-box", padding: "5px"}} type="date" defaultValue={dates.end ? moment(dates.end).format('yyyy-MM-DD') : ''}/>
       </div>
-      <Footer />
-    </main>
+    </>
   );
 }

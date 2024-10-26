@@ -1,0 +1,73 @@
+$selectedColor: red;
+$selectedTextColor: white;
+
+$unavailableColor: grey;
+$unavailableTextColor: white;
+
+.day{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 1px solid black;
+    text-align: center;
+    align-content: center;
+    cursor: pointer;
+    user-select: none;
+    &:not(.unavailable):hover{
+        border-color: $selectedColor;
+    }
+}
+
+.selected:not(.unavailable){
+    background-color: $selectedColor;
+    color: $selectedTextColor;
+}
+
+.unavailable{
+    background-color: $unavailableColor;
+    color: $unavailableTextColor;
+    cursor: not-allowed;
+}
+
+.calendar{
+    min-width: 500px;
+    width: 500px;
+    margin: 20px 0;
+    font-family: sans-serif;
+    font-size: 1rem;
+}
+
+.controls{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    button{
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.monthHeader{
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - (2 * 32px));
+    padding: 0 15px;
+
+    > span{
+        align-content: center;
+    }
+}
+
+.picker{
+    display: flex;
+    justify-content: space-between; 
+
+    > div{
+        display: inline-block;
+    }
+}
+
+.notInMonth{
+    opacity: 0.25;
+}
