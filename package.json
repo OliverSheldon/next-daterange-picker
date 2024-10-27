@@ -6,8 +6,8 @@
     "@ohsheldon:registry": "https://registry.npmjs.org"
   },
   "license": "Apache-2.0",
-  "main": "app/components/picker",
-  "types": "app/components/picker",
+  "main": "app/components/Calendar",
+  "types": "app/components/Calendar",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
