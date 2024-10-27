@@ -52,7 +52,7 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     }, [date, monthDates])
 
     useEffect(() => {
-        //console.log(selectedStartDay)
+        console.log(selectableDateRange)
         if(selectableDateRange != null){
             let canSelect = false;
             //console.log(date, ' ', moment(date).isSameOrAfter(dateRange?.start), ' ', moment(date).isSameOrBefore(dateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay) , ' ', moment(date).isSameOrBefore(selectedEndDay))

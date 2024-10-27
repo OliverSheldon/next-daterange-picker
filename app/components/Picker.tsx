@@ -5,7 +5,7 @@ import * as Moment from 'moment';
 import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
 import Month from "./Month";
-import { Calendar } from "calendar";
+import hash from 'object-hash'
 
 type DateStates = {
     state: string,
@@ -103,7 +103,8 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   }
 
   const configureSelectedStart = (date: Date | null) =>{
-    if(dateStates != null){
+    console.log(dateStates)
+    if(dateStates != null && dateStates != undefined && dateStates.length > 0){
       if(date != null){
           for(var x=0; x < dateStates.length; x++){
               if(x==0){
@@ -131,7 +132,8 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
       }
     }
     else{
-        setSelectableDateRange(null)
+      console.log('set selectable')
+        setSelectableDateRange(new DateRange(pickerDates[0][0],pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
     }
   }
 
@@ -142,7 +144,7 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   return (
     <div className="picker" onMouseLeave={()=>setIsMouseDown(false)}>
         <Month
-            key={`m0-${initDate}`}
+            key={`${hash(monthDates)}-${initDate}`}
             setIsMouseDown={setIsMouseDown}
             mouseDown={mouseDown}
             isMouseDown={isMouseDown}
@@ -159,7 +161,7 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
             selectableDateRange={selectableDateRange}
         />
         <Month
-            key={`m1-${initDate}`}
+            key={`${hash(monthDates2)}-${initDate}`}
             setIsMouseDown={setIsMouseDown}
             mouseDown={mouseDown}
             isMouseDown={isMouseDown}
