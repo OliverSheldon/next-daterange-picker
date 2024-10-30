@@ -75,6 +75,7 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   }
 
   const updateStartDay = (date: Date | null) => {
+    //console.log(date)
     setStartDay(date)
   }
 
@@ -103,10 +104,21 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   }
 
   const configureSelectedStart = (date: Date | null) =>{
-    console.log(dateStates)
     if(dateStates != null && dateStates != undefined && dateStates.length > 0){
       if(date != null){
           for(var x=0; x < dateStates.length; x++){
+            if(dateStates.length == 1)
+            {
+              if(moment(date).isBefore(moment(dateStates[x].range.start))){
+                setSelectableDateRange(new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+                //console.log('Before Range',new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+              }
+              else{
+                setSelectableDateRange(new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
+                //console.log('After Range',new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
+              }
+            }
+            else{
               if(x==0){
                   if(moment(date).isBefore(moment(dateStates[x].range.start))){
                       setSelectableDateRange(new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
@@ -123,16 +135,21 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
                     setSelectableDateRange(new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), moment(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).add(1, 'days').startOf('day')))
                     //console.log('end range ',new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
                   }
+                  /* else{
+                    
+                    setSelectableDateRange(null)
+                  } */
                 }
               }
+            }
           }
       }
-      else{
+      /* else{
+        console.log('here')
         setSelectableDateRange(null)
-      }
+      } */
     }
     else{
-      console.log('set selectable')
         setSelectableDateRange(new DateRange(pickerDates[0][0],pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
     }
   }

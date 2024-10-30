@@ -87,7 +87,7 @@ export default function Calendar({dateStates = undefined, getSelectedDates = und
     }, [initDate])
 
     return(
-        <div className="calendar">
+        <div key={`${dateStates ? JSON.stringify(dateStates) : 'c1'}`} className="calendar">
             <MonthSelector initDate={initDate} setDate={setDate}/>
             <Picker initDate={initDate} dateStates={dateStates} monthDates={monthDates} monthStart={monthStart} monthEnd={monthEnd} monthDates2={monthDates2} monthStart2={monthStart2} monthEnd2={monthEnd2} pickerDates={pickerDates} getSelectedDates={getSelectedDates}/>
         </div>

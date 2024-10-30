@@ -25,6 +25,8 @@ type Props = {
 }
 
 export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMonth, selectedStartDay, selectedEndDay, dateStates, setStartDay, setEndDay, monthDates, selectableDateRange}: Props){
+    //console.log(selectedStartDay)
+    
     const getIsUnavailable = () : boolean => {
         let result = false;
         //console.log(date, ' ', monthDates)
@@ -52,16 +54,18 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     }, [date, monthDates])
 
     useEffect(() => {
-        console.log(selectableDateRange)
+        //console.log(selectableDateRange, selectedStartDay)
         if(selectableDateRange != null){
             let canSelect = false;
-            //console.log(date, ' ', moment(date).isSameOrAfter(dateRange?.start), ' ', moment(date).isSameOrBefore(dateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay) , ' ', moment(date).isSameOrBefore(selectedEndDay))
+            //console.log(date, ' ', moment(date).isSameOrAfter(selectableDateRange?.start), ' ', moment(date).isSameOrBefore(selectableDateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay) , ' ', moment(date).isSameOrBefore(selectedEndDay))
             //console.log('selectable ',selectableDateRange)
             if(selectedStartDay != null && selectedEndDay == null){
                 
                 //console.log(date, ' ', moment(date).isSameOrAfter(selectableDateRange?.start), ' ', moment(date).isSameOrBefore(selectableDateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay))
-                if(moment(date).isSameOrAfter(selectableDateRange?.start) && moment(date).isSameOrBefore(selectableDateRange?.end) && moment(date).isSameOrAfter(selectedStartDay)){
-                    //console.log(date)
+                //console.log('selected start',selectedStartDay)
+                if(moment(date).isSameOrAfter(selectableDateRange?.start) && moment(date).isSameOrBefore(selectableDateRange?.end)/*  && moment(date).isSameOrAfter(selectedStartDay) */){
+                    /* console.log('range',selectableDateRange)
+                    console.log('date',date) */
                     canSelect = true;
                 }
             }
@@ -75,15 +79,21 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
             }
 
             if(canSelect){
-                //console.log(date)
+                //console.log(selectedStartDay, selectableDateRange?.start)
                 if(selectedStartDay != null && selectedEndDay != null){
+                    if(moment(selectedStartDay).isBefore(selectableDateRange?.start)){
+                        //console.log(date)
+                        setStartDay(selectableDateRange?.start);
+                    }
+
                     if(moment(date).isSame(selectedStartDay)){
                         setStartDay(date);
                         //console.log('start: ', date)
                     }
                     else if(moment(date).isAfter(selectedStartDay) && moment(date).isSameOrBefore(selectedEndDay)){
                         setEndDay(date);
-                        //console.log('end: ', date, ' ', isSelectable)
+                        //console.log('end: ', date)
+                        //console.log(selectedStartDay, selectedEndDay)
                     }
                 }
                 else if(selectedStartDay != null){
