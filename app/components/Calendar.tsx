@@ -15,10 +15,12 @@ type DateStates = {
 
 type Props = {
     dateStates?: DateStates[]
-    getSelectedDates?: Function
+    getSelectedDates?: Function,
+    showTwoMonths?: boolean,
+    earlierMonthsSelectable?: boolean,
 }
 
-export default function Calendar({dateStates = undefined, getSelectedDates = undefined} : Props) {
+export default function Calendar({dateStates = undefined, getSelectedDates = undefined, showTwoMonths = true, earlierMonthsSelectable = false} : Props) {
     let calendar = new C(1);
 
     let [initDate, setDate] = useState<Date>(new Date());
@@ -88,7 +90,7 @@ export default function Calendar({dateStates = undefined, getSelectedDates = und
 
     return(
         <div key={`${dateStates ? JSON.stringify(dateStates) : 'c1'}`} className="calendar">
-            <MonthSelector initDate={initDate} setDate={setDate}/>
+            <MonthSelector initDate={initDate} setDate={setDate} earlierMonthsSelectable={earlierMonthsSelectable} showTwoMonths={showTwoMonths}/>
             <Picker initDate={initDate} dateStates={dateStates} monthDates={monthDates} monthStart={monthStart} monthEnd={monthEnd} monthDates2={monthDates2} monthStart2={monthStart2} monthEnd2={monthEnd2} pickerDates={pickerDates} getSelectedDates={getSelectedDates}/>
         </div>
     );

@@ -38,6 +38,8 @@ $unavailableTextColor: white;
 }
 
 .controls{
+    min-width: 500px;
+    width: 500px;
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
@@ -54,6 +56,10 @@ $unavailableTextColor: white;
     width: calc(100% - (2 * 32px));
     padding: 0 15px;
 
+    &.single{
+        justify-content: space-around;
+    }
+
     > span{
         align-content: center;
     }
@@ -66,6 +72,32 @@ $unavailableTextColor: white;
     > div{
         display: inline-block;
     }
+}
+
+.state-legend{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    &>span{
+        &:before{
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 1px solid grey;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    }
+}
+
+.state-selected::before{
+    background-color: $selectedColor;
+}
+
+.state-unavailable::before{
+    background-color: $unavailableColor;
 }
 
 .notInMonth{

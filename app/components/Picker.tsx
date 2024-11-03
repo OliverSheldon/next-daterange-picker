@@ -126,8 +126,9 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
                   }
               }
               else{
-                if(moment(date).isBetween(dateStates[x-1].range.end,dateStates[x].range.start) || (x > 0 && x < dateStates.length - 2)){
-                  //console.log('mid range ',new DateRange(moment(dateStates[x-1].range.end).add(1, 'days').startOf('day'), moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+                if(moment(date).isBetween(dateStates[x-1].range.end,dateStates[x].range.start)){
+                  //console.log(x, dateStates.length -2)
+                  //console.log('mid range ',moment(dateStates[x-1].range.end).endOf('day'),moment(dateStates[x].range.start).add(-1, 'days').startOf('day'))
                   setSelectableDateRange(new DateRange(moment(dateStates[x-1].range.end).add(1, 'days').startOf('day'), moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
                 }
                 else{
@@ -159,41 +160,47 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   },[selectedStartDay]);
 
   return (
-    <div className="picker" onMouseLeave={()=>setIsMouseDown(false)}>
-        <Month
-            key={`${hash(monthDates)}-${initDate}`}
-            setIsMouseDown={setIsMouseDown}
-            mouseDown={mouseDown}
-            isMouseDown={isMouseDown}
-            mouseUp={mouseUp}
-            mouseOver={mouseOver}
-            dateStates={dateStates}
-            selectedStartDay={normalisedStartDay}
-            selectedEndDay={normalisedEndDay}
-            setStartDay={updateStartDay}
-            setEndDay={updateEndDay}
-            monthDates={monthDates}
-            monthStart={monthStart}
-            monthEnd={monthEnd}
-            selectableDateRange={selectableDateRange}
-        />
-        <Month
-            key={`${hash(monthDates2)}-${initDate}`}
-            setIsMouseDown={setIsMouseDown}
-            mouseDown={mouseDown}
-            isMouseDown={isMouseDown}
-            mouseUp={mouseUp}
-            mouseOver={mouseOver}
-            dateStates={dateStates}
-            selectedStartDay={normalisedStartDay}
-            selectedEndDay={normalisedEndDay}
-            setStartDay={updateStartDay}
-            setEndDay={updateEndDay}
-            monthDates={monthDates2}
-            monthStart={monthStart2}
-            monthEnd={monthEnd2}
-            selectableDateRange={selectableDateRange}
-        />
-    </div>
+    <>
+      <div className="picker" onMouseLeave={()=>setIsMouseDown(false)}>
+          <Month
+              key={`${hash(monthDates)}-${initDate}`}
+              setIsMouseDown={setIsMouseDown}
+              mouseDown={mouseDown}
+              isMouseDown={isMouseDown}
+              mouseUp={mouseUp}
+              mouseOver={mouseOver}
+              dateStates={dateStates}
+              selectedStartDay={normalisedStartDay}
+              selectedEndDay={normalisedEndDay}
+              setStartDay={updateStartDay}
+              setEndDay={updateEndDay}
+              monthDates={monthDates}
+              monthStart={monthStart}
+              monthEnd={monthEnd}
+              selectableDateRange={selectableDateRange}
+          />
+          <Month
+              key={`${hash(monthDates2)}-${initDate}`}
+              setIsMouseDown={setIsMouseDown}
+              mouseDown={mouseDown}
+              isMouseDown={isMouseDown}
+              mouseUp={mouseUp}
+              mouseOver={mouseOver}
+              dateStates={dateStates}
+              selectedStartDay={normalisedStartDay}
+              selectedEndDay={normalisedEndDay}
+              setStartDay={updateStartDay}
+              setEndDay={updateEndDay}
+              monthDates={monthDates2}
+              monthStart={monthStart2}
+              monthEnd={monthEnd2}
+              selectableDateRange={selectableDateRange}
+          />
+      </div>
+      <div className="state-legend">
+        <span className="state-selected">Your Selection</span>
+        <span className="state-unavailable">Unavailable</span>
+      </div>
+    </>
   );
 }

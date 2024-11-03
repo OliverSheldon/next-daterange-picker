@@ -6,10 +6,12 @@ import { useState } from "react";
 
 type Props = {
     initDate: Date,
-    setDate: Function
+    setDate: Function,
+    earlierMonthsSelectable: boolean,
+    showTwoMonths: boolean
 }
 
-export default function MonthSelector({initDate, setDate} : Props) {
+export default function MonthSelector({initDate, setDate, earlierMonthsSelectable, showTwoMonths} : Props) {
     let [chosenDate, setChosenDate] = useState<Date>(initDate)
 
     const updateDate = (direction: string) => {
@@ -28,12 +30,12 @@ export default function MonthSelector({initDate, setDate} : Props) {
 
     return(
         <div className="controls">
-            <button disabled={moment(chosenDate).startOf('month').isSame( moment(new Date()).startOf('month'))} onClick={()=>updateDate('Left')}>{'<'}</button>
-            <div className="monthHeader">
+            <button type="button" disabled={!earlierMonthsSelectable && moment(chosenDate).startOf('month').isSame( moment(new Date()).startOf('month'))} onClick={()=>updateDate('Left')}>{'<'}</button>
+            <div className={`monthHeader ${!showTwoMonths && 'single'}`}>
                 <span>{moment(chosenDate).format('MMMM YYYY')}</span>
-                <span>{moment(chosenDate).add(1, 'month').format('MMMM YYYY')}</span>
+                {showTwoMonths && <span>{moment(chosenDate).add(1, 'month').format('MMMM YYYY')}</span>}
             </div>
-            <button onClick={()=>updateDate('Right')}>{'>'}</button>
+            <button type="button" onClick={()=>updateDate('Right')}>{'>'}</button>
         </div>
     );
 }
