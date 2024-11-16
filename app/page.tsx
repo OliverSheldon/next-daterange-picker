@@ -4,7 +4,6 @@ import { useState } from "react";
 import * as Moment from 'moment';
 import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
-import Month from "./components/Month";
 import Calendar from "./components/Calendar";
 
 type DateStates = {

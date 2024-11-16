@@ -1,42 +1,84 @@
-Based on the package: http://onefinestay.github.io/react-daterange-picker/
-Updated to use the most recent version of react
+#Next Daterange Picker
 
-Probably won't get round to fully converting this to next, but thought it'd be worth upgrading the original at least.
+A Date Range Picker built with next.js and TypeScript
 
+##Features
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+- Click and drag calendar
+- Select single date
+- Select a date range over 1-2 months
+- Define unavailable dates
+- Prevention of dates being selected if they fall outside of the selectable range (determined by unavailable dates)
+- Output date values to input elements
 
-## Getting Started
+##Demo
 
-First, run the development server:
+Try it out at [https://oliversheldon.co.uk/next-daterange-picker](https://oliversheldon.co.uk/next-daterange-picker).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+##Getting Started
+
+Import the following:
+
+```
+import Calendar from 'next-daterange-picker/app/components/Calendar';
+import 'next-daterange-picker/public/styles/calandar.scss'
+import * as Moment from 'moment';
+import { DateRange, extendMoment } from 'moment-range';
+const moment = extendMoment(Moment);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The `Calendar` element takes 3 optional parameters: getSelectedDates, dateStates and showTwoMonths.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+getSelectedDates is a callback Function which will return the selected start and end date, on change, in the following format:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+type Dates = {
+  start: Date,
+  end: Date
+}
+```
+These dates can then be passed to input elements.
 
-## Learn More
+dateStates accepts an array of DateStates, which is used to pre highlight any date ranges.
+At the moment, this feature only supports one state: "unavailable", which will prevent users from selecting those dates. **Note, this will not stop users from inputting invalid dates in any connected input elements**.
+The DateStates type parameters are as follows: 'state: string, range: DateRange' *See imports above*. 
+Here is an example of the type and implementation:
 
-To learn more about Next.js, take a look at the following resources:
+```
+type DateStates = {
+  state: string,
+  range: DateRange
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+let dateStates: DateStates[] = [
+    {
+      state: 'unavailable',
+      range: moment.range(
+        moment().add(2, 'weeks').startOf('day'),
+        moment().add(2, 'weeks').add(5, 'days').endOf('day')
+      ),
+    },
+    {
+      state: 'unavailable',
+      range: moment.range(
+        moment().add(4, 'weeks').add(1, 'days').startOf('day'),
+        moment().add(4, 'weeks').add(5, 'days').endOf('day')
+      ),
+    },
+    {
+      state: 'unavailable',
+      range: moment.range(
+        moment().add(6, 'weeks').add(1, 'days').startOf('day'),
+        moment().add(6, 'weeks').add(5, 'days').endOf('day')
+      ),
+    }
+  ]
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+showTwoMonths is a boolean which determines how many calendar months are rendered. true = 2 months, false = 1 month.
 
-## Deploy on Vercel
+For a full example, including input elements, see the page.tsx file at 'next-daterange-picker/app/page.tsx'.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+##Sponsorship
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Like what you see? Please consider sponsoring my work via [Github Sponsors](https://github.com/sponsors/OliverSheldon).

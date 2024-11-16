@@ -38,6 +38,10 @@
     "type": "git",
     "url": "git+https://github.com/OliverSheldon/next-daterange-picker.git"
   },
+  "funding":{
+    "type": "GitHubSponsors",
+    "url": "https://github.com/sponsors/OliverSheldon"
+  },
   "keywords": [
     "next",
     "nextjs",
