@@ -1,8 +1,10 @@
-#Next Daterange Picker
+# Next Daterange Picker
 
 A Date Range Picker built with next.js and TypeScript
 
-##Features
+---
+
+## Features
 
 - Click and drag calendar
 - Select single date
@@ -11,11 +13,15 @@ A Date Range Picker built with next.js and TypeScript
 - Prevention of dates being selected if they fall outside of the selectable range (determined by unavailable dates)
 - Output date values to input elements
 
-##Demo
+---
+
+## Demo
 
 Try it out at [https://oliversheldon.co.uk/next-daterange-picker](https://oliversheldon.co.uk/next-daterange-picker).
 
-##Getting Started
+---
+
+## Getting Started
 
 Import the following:
 
@@ -79,6 +85,8 @@ showTwoMonths is a boolean which determines how many calendar months are rendere
 
 For a full example, including input elements, see the page.tsx file at 'next-daterange-picker/app/page.tsx'.
 
-##Sponsorship
+---
+
+## Sponsorship
 
 Like what you see? Please consider sponsoring my work via [Github Sponsors](https://github.com/sponsors/OliverSheldon).
