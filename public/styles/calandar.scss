@@ -4,13 +4,24 @@ $selectedTextColor: white;
 $unavailableColor: grey;
 $unavailableTextColor: white;
 
-.day{
+.day-block{
     display: inline-block;
     width: 32px;
     height: 32px;
-    border: 1px solid black;
     text-align: center;
     align-content: center;
+}
+
+.day-title{
+    @extend .day-block;
+    padding: 1px;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.day{
+    @extend .day-block;
+    border: 1px solid black;    
     cursor: pointer;
     user-select: none;
     &:not(.unavailable):hover{

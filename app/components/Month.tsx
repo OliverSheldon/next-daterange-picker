@@ -31,6 +31,15 @@ type Props = {
 export default function Month({setIsMouseDown, mouseDown, isMouseDown, mouseUp, mouseOver, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, monthStart, monthEnd, selectableDateRange}: Props) {
   return (
     <div>
+      <div>
+        <div className="day-title">Mon</div>
+        <div className="day-title">Tue</div>
+        <div className="day-title">Wed</div>
+        <div className="day-title">Thu</div>
+        <div className="day-title">Fri</div>
+        <div className="day-title">Sat</div>
+        <div className="day-title">Sun</div>
+      </div>
       {
         monthDates.map((item, index)=>
             <Week
