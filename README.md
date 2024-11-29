@@ -6,6 +6,7 @@ A Date Range Picker built with next.js and TypeScript
 
 ## Features
 
+- Mobile Support
 - Click and drag calendar
 - Select single date
 - Select a date range over 1-2 months
