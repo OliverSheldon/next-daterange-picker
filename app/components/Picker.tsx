@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import * as Moment from 'moment';
 import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
@@ -35,29 +35,13 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   let [normalisedStartDay, setNormalisedStartDay] = useState<Date | null>(null);
   let [normalisedEndDay, setNormalisedEndDay] = useState<Date | null>(null);
   let [selectableDateRange, setSelectableDateRange] = useState<DateRange | null>(null)
+  let [lastTouched, setLastTouched] = useState<EventTarget | undefined>()
 
   useEffect(() => {
     if(getSelectedDates != null){
       getSelectedDates({start: startDay, end: endDay})
     }
   }, [startDay, endDay])
-
-  const mouseDown = (date: Date) =>
-  {
-    reset();
-    setSelectedStartDay(date);
-    normaliseDates();
-    setIsMouseDown(true);
-  }
-
-  const mouseUp = (date: Date) =>
-  {
-    setSelectedEndDay(date);
-    normaliseDates();
-    setIsMouseDown(false);
-    setSelectedStartDay(null);
-    setSelectedEndDay(null);
-  }
 
   const reset = () =>{
     setSelectedStartDay(null);
@@ -67,11 +51,31 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
     setEndDay(null);
   }
 
+  const mouseDown = (date: Date) =>
+  {
+    //console.log('down ', date)
+    reset();
+    setSelectedStartDay(date);
+    normaliseDates();
+    setIsMouseDown(true);
+  }
+
   const mouseOver = (date: Date) => {
+    //console.log('over ', date)
     if(isMouseDown){
       setSelectedEndDay(date);
       normaliseDates();
     }
+  }
+
+  const mouseUp = (date: Date) =>
+  {
+    //console.log('up ', date)
+    setSelectedEndDay(date);
+    normaliseDates();
+    setIsMouseDown(false);
+    setSelectedStartDay(null);
+    setSelectedEndDay(null);
   }
 
   const updateStartDay = (date: Date | null) => {
@@ -178,6 +182,8 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
               monthStart={monthStart}
               monthEnd={monthEnd}
               selectableDateRange={selectableDateRange}
+              setLastTouched={setLastTouched}
+              lastTouched={lastTouched}
           />
           <Month
               key={`${hash(monthDates2)}-${initDate}`}
@@ -195,6 +201,8 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
               monthStart={monthStart2}
               monthEnd={monthEnd2}
               selectableDateRange={selectableDateRange}
+              setLastTouched={setLastTouched}
+              lastTouched={lastTouched}
           />
       </div>
       <div className="state-legend">

@@ -32,8 +32,8 @@ export default function MonthSelector({initDate, setDate, earlierMonthsSelectabl
         <div className="controls">
             <button type="button" disabled={!earlierMonthsSelectable && moment(chosenDate).startOf('month').isSame( moment(new Date()).startOf('month'))} onClick={()=>updateDate('Left')}>{'<'}</button>
             <div className={`monthHeader ${!showTwoMonths && 'single'}`}>
-                <span>{moment(chosenDate).format('MMMM YYYY')}</span>
-                {showTwoMonths && <span>{moment(chosenDate).add(1, 'month').format('MMMM YYYY')}</span>}
+                <span>{moment(chosenDate).format('MMM YYYY')}</span>
+                {showTwoMonths && <span>{moment(chosenDate).add(1, 'month').format('MMM YYYY')}</span>}
             </div>
             <button type="button" onClick={()=>updateDate('Right')}>{'>'}</button>
         </div>

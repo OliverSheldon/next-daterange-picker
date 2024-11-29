@@ -2,7 +2,7 @@
 
 import moment from "moment";
 import { DateRange } from "moment-range";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type DateStates = {
     state: string,
@@ -21,12 +21,14 @@ type Props = {
     setStartDay: Function,
     setEndDay: Function,
     monthDates: Date[][],
-    selectableDateRange: DateRange | null
+    selectableDateRange: DateRange | null,
+    setLastTouched: Function,
+    lastTouched: EventTarget | undefined
 }
 
-export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMonth, selectedStartDay, selectedEndDay, dateStates, setStartDay, setEndDay, monthDates, selectableDateRange}: Props){
+export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMonth, selectedStartDay, selectedEndDay, dateStates, setStartDay, setEndDay, monthDates, selectableDateRange, setLastTouched, lastTouched}: Props){
     //console.log(selectedStartDay)
-    
+    const ref = useRef(null);
     const getIsUnavailable = () : boolean => {
         let result = false;
         //console.log(date, ' ', monthDates)
@@ -48,6 +50,20 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
 
     let [isSelected, setIsSelected] = useState<boolean>(false)
     let [isUnavailable, setIsUnavailable] = useState<boolean>(false)
+
+    useEffect(() => {
+        (ref.current as any).addEventListener('sim-down', (e: Event)=>{
+            setLastTouched(e.target)
+            mouseDown(date);
+        });
+        (ref.current as any).addEventListener('sim-up', (e: Event)=>{
+            mouseUp(date);
+        });
+        (ref.current as any).addEventListener('sim-over', (e: Event)=>{
+            setLastTouched(e.target)
+            setMouseOver(date);
+        });
+    });
 
     useEffect(() => {
         setIsUnavailable(getIsUnavailable())
@@ -119,10 +135,14 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
 
     return <div
     key={date.toString()}
+    ref={ref}
     className={`day${isSelected ? ' selected' : ''}${isUnavailable ? ' unavailable' : ''}${belongsToMonth ? '' : ' notInMonth'}`}
-    onMouseDown={()=>mouseDown(date)}
-    onMouseUp={()=>mouseUp(date)}
-    onMouseOver={()=>setMouseOver(date)}
+    onMouseDown={(e)=>mouseDown(date)}
+    onTouchStart={(e)=>{document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)?.dispatchEvent(new Event('sim-down'))}}
+    onMouseUp={(e)=>mouseUp(date)}
+    onTouchEnd={(e)=>{lastTouched?.dispatchEvent(new Event('sim-up'))}}
+    onMouseOver={(e)=>setMouseOver(date)}
+    onTouchMove={(e)=>{document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)?.dispatchEvent(new Event('sim-over'))}}
     onDrag={(e)=>{e.preventDefault()}}
     >{new Date(date).getDate() }</div>
 }

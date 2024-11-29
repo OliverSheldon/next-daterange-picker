@@ -25,10 +25,12 @@ type Props = {
     setStartDay: Function,
     setEndDay: Function,
     monthDates: Date[][],
-    selectableDateRange: DateRange | null
+    selectableDateRange: DateRange | null,
+    setLastTouched: Function,
+    lastTouched: EventTarget | undefined
 }
 
-export default function Week({mouseDown, mouseUp, mouseOver, dates, monthStart, monthEnd, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, selectableDateRange} : Props) {
+export default function Week({mouseDown, mouseUp, mouseOver, dates, monthStart, monthEnd, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, selectableDateRange, setLastTouched, lastTouched} : Props) {
     const belongsToMonth = (date: Date) : boolean =>{
         return moment().range(monthStart, monthEnd).contains(date)
     }   
@@ -50,6 +52,8 @@ export default function Week({mouseDown, mouseUp, mouseOver, dates, monthStart, 
                     setEndDay={setEndDay}
                     monthDates={monthDates}
                     selectableDateRange={selectableDateRange}
+                    setLastTouched={setLastTouched}
+                    lastTouched={lastTouched}
                 />
             )}            
         </div>

@@ -4,6 +4,15 @@ $selectedTextColor: white;
 $unavailableColor: grey;
 $unavailableTextColor: white;
 
+html, body{
+    overflow-x: hidden;
+}
+
+body{
+    margin: 0;
+    width: 100vw;
+}
+
 .day-block{
     display: inline-block;
     width: 32px;
@@ -24,6 +33,7 @@ $unavailableTextColor: white;
     border: 1px solid black;    
     cursor: pointer;
     user-select: none;
+    touch-action: none;
     &:not(.unavailable):hover{
         border-color: $selectedColor;
     }
@@ -41,16 +51,27 @@ $unavailableTextColor: white;
 }
 
 .calendar{
-    min-width: 500px;
-    width: 500px;
-    margin: 20px 0;
+    @media (min-width: 576px){
+        min-width: 500px;
+        width: 500px;
+        margin: 15px;
+    }
+    @media (max-width: 575.98px){
+        padding: 0 15px;
+    }
+    width: 100%;
+    margin: 15px 0;
     font-family: sans-serif;
     font-size: 1rem;
+    box-sizing: border-box;
 }
 
 .controls{
-    min-width: 500px;
-    width: 500px;
+    @media (min-width: 576px){
+        min-width: 500px;
+        width: 500px;
+    }
+    width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
@@ -78,7 +99,13 @@ $unavailableTextColor: white;
 
 .picker{
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
+
+    @media (max-width: 575.98px){
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
 
     > div{
         display: inline-block;
@@ -113,4 +140,31 @@ $unavailableTextColor: white;
 
 .notInMonth{
     opacity: 0.25;
+}
+
+.example-inputs{
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+
+    @media (max-width: 575.98px){
+        flex-direction: column;
+        width: 100%;
+    }
+
+    input{
+        @media (min-width: 576px){
+            width: calc(34px*7);
+        }
+        width: calc(100% - 30px);
+        box-sizing: border-box;
+        padding: 5px;
+
+        @media (max-width: 575.98px){
+            &:not(:first-of-type){
+                margin-top: 15px;
+            }
+        }
+    }
 }

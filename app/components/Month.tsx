@@ -25,10 +25,12 @@ type Props = {
     monthDates: Date[][],
     monthStart: Date,
     monthEnd: Date,
-    selectableDateRange: DateRange | null
+    selectableDateRange: DateRange | null,
+    setLastTouched: Function,
+    lastTouched: EventTarget | undefined
 }
 
-export default function Month({setIsMouseDown, mouseDown, isMouseDown, mouseUp, mouseOver, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, monthStart, monthEnd, selectableDateRange}: Props) {
+export default function Month({setIsMouseDown, mouseDown, isMouseDown, mouseUp, mouseOver, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, monthStart, monthEnd, selectableDateRange, setLastTouched, lastTouched}: Props) {
   return (
     <div>
       <div>
@@ -59,6 +61,8 @@ export default function Month({setIsMouseDown, mouseDown, isMouseDown, mouseUp, 
                 setEndDay={setEndDay}
                 monthDates={monthDates}
                 selectableDateRange={selectableDateRange}
+                setLastTouched={setLastTouched}
+                lastTouched={lastTouched}
             />
         )
       }

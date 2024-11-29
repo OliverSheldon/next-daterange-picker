@@ -85,9 +85,9 @@ export default function Home() {
   return (
     <>
       <Calendar getSelectedDates={setDates} dateStates={dateStates} showTwoMonths={true}/>
-      <div style={{width: "500px",display: "flex", justifyContent: "space-between"}}>
-        <input style={{width: "calc(34px*7)", boxSizing: "border-box", padding: "5px"}} type="date" defaultValue={dates.start ? moment(dates.start).format('yyyy-MM-DD') : ''}/>
-        <input style={{width: "calc(34px*7)", boxSizing: "border-box", padding: "5px"}} type="date" defaultValue={dates.end ? moment(dates.end).format('yyyy-MM-DD') : ''}/>
+      <div className="example-inputs">
+        <input type="date" defaultValue={dates.start ? moment(dates.start).format('yyyy-MM-DD') : ''}/>
+        <input type="date" defaultValue={dates.end ? moment(dates.end).format('yyyy-MM-DD') : ''}/>
       </div>
     </>
   );
