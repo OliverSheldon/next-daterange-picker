@@ -29,24 +29,29 @@ type Props = {
 export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMonth, selectedStartDay, selectedEndDay, dateStates, setStartDay, setEndDay, monthDates, selectableDateRange, setLastTouched, lastTouched}: Props){
     //console.log(selectedStartDay)
     const ref = useRef(null);
-    const getIsUnavailable = () : boolean => {
+    const getIsUnavailable = (): boolean => {
         let result = false;
-        //console.log(date, ' ', monthDates)
-        if(dateStates != null && dateStates != undefined && Array.isArray(dateStates)){
-            dateStates?.forEach(element => {
-                //console.log(moment(date).isSameOrAfter(element.range.start), ' ',moment(date).isSameOrBefore(element.range.end))
-                if(element.state == 'unavailable'){
-                    if(moment(date).isSameOrAfter(element.range.start) && moment(date).isSameOrBefore(element.range.end)){
-                        //console.log(date, ' between ', element.range.start, ' ', element.range.end)
-                        if(!result){
-                            result = true;
-                        }
+
+        if (Array.isArray(dateStates)) {
+            const target = moment.utc(date);
+
+            dateStates.forEach((element) => {
+                if (element.state === "unavailable") {
+                    const start = moment.utc(element.range.start);
+                    const end = moment.utc(element.range.end);
+
+                    if (
+                        target.isSameOrAfter(start) &&
+                        target.isSameOrBefore(end)
+                    ) {
+                        result = true;
                     }
                 }
             });
         }
+
         return result;
-    }
+    };
 
     let [isSelected, setIsSelected] = useState<boolean>(false)
     let [isUnavailable, setIsUnavailable] = useState<boolean>(false)
