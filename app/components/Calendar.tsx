@@ -20,39 +20,45 @@ type Props = {
     earlierMonthsSelectable?: boolean,
 }
 
+const toUtcMonthDates = (dates: Date[][]) => {
+    return dates.map((week) =>
+        week.map((date) => moment.utc(date).startOf('day').toDate())
+    );
+}
+
 export default function Calendar({dateStates = undefined, getSelectedDates = undefined, showTwoMonths = true, earlierMonthsSelectable = false} : Props) {
     let calendar = new C(1);
 
-    let [initDate, setDate] = useState<Date>(new Date());
+    let [initDate, setDate] = useState<Date>(moment.utc().startOf('day').toDate());
     
-    let [monthDate, setMonthDate] = useState<moment.Moment>(moment(new Date(initDate.getFullYear(), initDate.getMonth(), 1)))
-    let [monthDates, setMonthDates] = useState<Date[][]>(calendar.monthDates(monthDate.year(), monthDate.month()))
+    let [monthDate, setMonthDate] = useState<moment.Moment>(moment.utc(initDate).startOf('month'))
+    let [monthDates, setMonthDates] = useState<Date[][]>(toUtcMonthDates(calendar.monthDates(monthDate.year(), monthDate.month())))
     let [monthStart, setMonthStart] = useState<Date>(monthDate.startOf('month').toDate())
     let [monthEnd, setMonthEnd] = useState<Date>(monthDate.endOf('month').toDate())
 
-    let [monthDate2, setMonthDate2] = useState<moment.Moment>(moment(new Date(moment(initDate).add(1, 'month').toDate().getFullYear(), moment(initDate).add(1, 'month').toDate().getMonth(), 1)))
-    let [monthDates2, setMonthDates2] = useState<Date[][]>(calendar.monthDates(monthDate2.year(), monthDate2.month()))
+    let [monthDate2, setMonthDate2] = useState<moment.Moment>(moment.utc(initDate).add(1, 'month').startOf('month'))
+    let [monthDates2, setMonthDates2] = useState<Date[][]>(toUtcMonthDates(calendar.monthDates(monthDate2.year(), monthDate2.month())))
     let [monthStart2, setMonthStart2] = useState<Date>(monthDate2.startOf('month').toDate())
     let [monthEnd2, setMonthEnd2] = useState<Date>(monthDate2.endOf('month').toDate())
 
     let [pickerDates, setPickerDates] = useState<Date[][]>([...monthDates, ...monthDates2])
 
     useEffect(() => {
-        let md = moment(new Date(initDate.getFullYear(), initDate.getMonth(), 1))
-        let mdts = calendar.monthDates(md.year(), md.month())
+        let md = moment.utc(initDate).startOf('month')
+        let mdts = toUtcMonthDates(calendar.monthDates(md.year(), md.month()))
         setMonthDate(md)
         setMonthDates(mdts)
         setMonthStart(md.startOf('month').toDate())
         setMonthEnd(md.endOf('month').toDate())
 
-        let md2 = moment(new Date(moment(initDate).add(1, 'month').toDate().getFullYear(), moment(initDate).add(1, 'month').toDate().getMonth(), 1))
-        let mdts2 = calendar.monthDates(md2.year(), md2.month())
+        let md2 = moment.utc(initDate).add(1, 'month').startOf('month')
+        let mdts2 = toUtcMonthDates(calendar.monthDates(md2.year(), md2.month()))
 
         if(mdts.length > mdts2.length){
             let newDates: Date[] = [];
             let start: Date = mdts2[mdts2.length-1][mdts2[mdts2.length-1].length-1]
             for(var x=0; x<7; x++){
-                newDates.push(moment(start).add(1+x, 'days').toDate())
+                newDates.push(moment.utc(start).add(1+x, 'days').startOf('day').toDate())
             }
             mdts2.push(newDates)
         }
@@ -60,7 +66,7 @@ export default function Calendar({dateStates = undefined, getSelectedDates = und
             let newDates: Date[] = [];
             let start: Date = mdts[mdts.length-1][mdts[mdts.length-1].length-1]
             for(var x=0; x<7; x++){
-                newDates.push(moment(start).add(1+x, 'days').toDate())
+                newDates.push(moment.utc(start).add(1+x, 'days').startOf('day').toDate())
             }
             mdts.push(newDates)
         }
@@ -68,14 +74,14 @@ export default function Calendar({dateStates = undefined, getSelectedDates = und
             let newDates: Date[] = [];
             let start: Date = mdts2[mdts2.length-1][mdts2[mdts2.length-1].length-1]
             for(var x=0; x<7; x++){
-                newDates.push(moment(start).add(1+x, 'days').toDate())
+                newDates.push(moment.utc(start).add(1+x, 'days').startOf('day').toDate())
             }
             mdts2.push(newDates)
 
             let newDates2: Date[] = [];
             let start2: Date = mdts[mdts.length-1][mdts[mdts.length-1].length-1]
             for(var x=0; x<7; x++){
-                newDates2.push(moment(start2).add(1+x, 'days').toDate())
+                newDates2.push(moment.utc(start2).add(1+x, 'days').startOf('day').toDate())
             }
             mdts.push(newDates2)
         }

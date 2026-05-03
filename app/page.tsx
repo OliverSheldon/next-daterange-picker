@@ -17,77 +17,25 @@ type Dates = {
 }
 
 export default function Home() {
-  let [dates, setDates] = useState<Dates>({start: new Date(), end: new Date()})
+  let [dates, setDates] = useState<Dates>({start: moment.utc().startOf('day').toDate(), end: moment.utc().startOf('day').toDate()})
 
 
   let dateStates: DateStates[] = [
     {
       state: 'unavailable',
       range: moment.range(
-        moment().add(2, 'weeks').startOf('day'),
-        moment().add(2, 'weeks').add(5, 'days').endOf('day')
-      ),
-    },
-    {
-      state: 'unavailable',
-      range: moment.range(
-        moment().add(4, 'weeks').add(1, 'days').startOf('day'),
-        moment().add(4, 'weeks').add(5, 'days').endOf('day')
-      ),
-    },
-    {
-      state: 'unavailable',
-      range: moment.range(
-        moment().add(6, 'weeks').add(1, 'days').startOf('day'),
-        moment().add(6, 'weeks').add(5, 'days').endOf('day')
+        moment.utc(new Date("2026-05-22 00:00:00Z")).startOf('day'),
+        moment.utc(new Date("2026-05-25 00:00:00Z")).endOf("day")
       ),
     }
   ]
-
-  /* let dateStates: DateStates[] = [
-    {
-        state: "unavailable",
-        range: moment.range(
-            new Date("2024-11-18T00:00:00.000Z"),
-            new Date("2024-11-20T00:00:00.000Z")
-        )
-    },
-    {
-        state: "unavailable",
-        range: moment.range(
-            new Date("2024-11-23T00:00:00.000Z"),
-            new Date("2024-11-23T00:00:00.000Z")
-        )
-    },
-    {
-        state: "unavailable",
-        range: moment.range(
-            new Date("2024-11-25T00:00:00.000Z"),
-            new Date("2024-12-01T00:00:00.000Z")
-        )
-    },
-    {
-        state: "unavailable",
-        range: moment.range(
-            new Date("2024-12-16T00:00:00.000Z"),
-            new Date("2024-12-22T00:00:00.000Z")
-        )
-    },
-    {
-        state: "unavailable",
-        range: moment.range(
-            new Date("2025-03-10T00:00:00.000Z"),
-            new Date("2025-03-16T00:00:00.000Z")
-        )
-    }
-] */
 
   return (
     <>
       <Calendar getSelectedDates={setDates} dateStates={dateStates} showTwoMonths={true}/>
       <div className="example-inputs">
-        <input type="date" defaultValue={dates.start ? moment(dates.start).format('yyyy-MM-DD') : ''}/>
-        <input type="date" defaultValue={dates.end ? moment(dates.end).format('yyyy-MM-DD') : ''}/>
+        <input type="date" defaultValue={dates.start ? moment.utc(dates.start).format('YYYY-MM-DD') : ''}/>
+        <input type="date" defaultValue={dates.end ? moment.utc(dates.end).format('YYYY-MM-DD') : ''}/>
       </div>
     </>
   );

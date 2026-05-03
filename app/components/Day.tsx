@@ -27,8 +27,8 @@ type Props = {
 }
 
 export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMonth, selectedStartDay, selectedEndDay, dateStates, setStartDay, setEndDay, monthDates, selectableDateRange, setLastTouched, lastTouched}: Props){
-    //console.log(selectedStartDay)
     const ref = useRef(null);
+
     const getIsUnavailable = (): boolean => {
         let result = false;
 
@@ -37,12 +37,12 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
 
             dateStates.forEach((element) => {
                 if (element.state === "unavailable") {
-                    const start = moment.utc(element.range.start);
-                    const end = moment.utc(element.range.end);
+                    const start = moment.utc(element.range.start).startOf('day');
+                    const end = moment.utc(element.range.end).endOf('day');
 
                     if (
-                        target.isSameOrAfter(start) &&
-                        target.isSameOrBefore(end)
+                        target.isSameOrAfter(start, 'day') &&
+                        target.isSameOrBefore(end, 'day')
                     ) {
                         result = true;
                     }
@@ -75,66 +75,49 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     }, [date, monthDates])
 
     useEffect(() => {
-        //console.log(selectableDateRange, selectedStartDay)
         if(selectableDateRange != null){
             let canSelect = false;
-            //console.log(date, ' ', moment(date).isSameOrAfter(selectableDateRange?.start), ' ', moment(date).isSameOrBefore(selectableDateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay) , ' ', moment(date).isSameOrBefore(selectedEndDay))
-            //console.log('selectable ',selectableDateRange)
+            const utcDate = moment.utc(date).startOf('day');
+            const utcRangeStart = moment.utc(selectableDateRange.start).startOf('day');
+            const utcRangeEnd = moment.utc(selectableDateRange.end).endOf('day');
+            const utcSelectedStart = selectedStartDay ? moment.utc(selectedStartDay).startOf('day') : null;
+            const utcSelectedEnd = selectedEndDay ? moment.utc(selectedEndDay).startOf('day') : null;
+
             if(selectedStartDay != null && selectedEndDay == null){
-                
-                //console.log(date, ' ', moment(date).isSameOrAfter(selectableDateRange?.start), ' ', moment(date).isSameOrBefore(selectableDateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay))
-                //console.log('selected start',selectedStartDay)
-                if(moment(date).isSameOrAfter(selectableDateRange?.start) && moment(date).isSameOrBefore(selectableDateRange?.end)/*  && moment(date).isSameOrAfter(selectedStartDay) */){
-                    /* console.log('range',selectableDateRange)
-                    console.log('date',date) */
+                if(utcDate.isSameOrAfter(utcRangeStart, 'day') && utcDate.isSameOrBefore(utcRangeEnd, 'day')){
                     canSelect = true;
                 }
             }
             else if(selectedStartDay != null && selectedEndDay != null){
-                //console.log(date, ' ', moment(date).isSameOrAfter(selectableDateRange?.start), ' ', moment(date).isSameOrBefore(selectableDateRange?.end), ' ',moment(date).isSameOrAfter(selectedStartDay) , ' ', moment(date).isSameOrBefore(selectedEndDay))
-                //console.log(date, ' ',selectableDateRange?.end)
-                if(moment(date).isSameOrAfter(selectableDateRange?.start) && moment(date).isSameOrBefore(selectableDateRange?.end) && moment(date).isSameOrAfter(selectedStartDay) && moment(date).isSameOrBefore(selectedEndDay)){
-                    //console.log(date)
+                if(utcDate.isSameOrAfter(utcRangeStart, 'day') && utcDate.isSameOrBefore(utcRangeEnd, 'day') && utcSelectedStart && utcSelectedEnd && utcDate.isSameOrAfter(utcSelectedStart, 'day') && utcDate.isSameOrBefore(utcSelectedEnd, 'day')){
                     canSelect = true;
                 }
             }
 
             if(canSelect){
-                //console.log(selectedStartDay, selectableDateRange?.start)
-                if(selectedStartDay != null && selectedEndDay != null){
-                    if(moment(selectedStartDay).isBefore(selectableDateRange?.start)){
-                        //console.log(date)
-                        setStartDay(selectableDateRange?.start);
+                if(utcSelectedStart != null && utcSelectedEnd != null){
+                    if(utcSelectedStart.isBefore(utcRangeStart, 'day')){
+                        setStartDay(moment.utc(selectableDateRange.start).startOf('day').toDate());
                     }
 
-                    if(moment(date).isSame(selectedStartDay)){
+                    if(utcDate.isSame(utcSelectedStart, 'day')){
                         setStartDay(date);
-                        //console.log('start: ', date)
                     }
-                    else if(moment(date).isAfter(selectedStartDay) && moment(date).isSameOrBefore(selectedEndDay)){
+                    else if(utcDate.isAfter(utcSelectedStart, 'day') && utcDate.isSameOrBefore(utcSelectedEnd, 'day')){
                         setEndDay(date);
-                        //console.log('end: ', date)
-                        //console.log(selectedStartDay, selectedEndDay)
                     }
                 }
-                else if(selectedStartDay != null){
-                    if(moment(date).isSame(selectedStartDay)){
+                else if(utcSelectedStart != null){
+                    if(utcDate.isSame(utcSelectedStart, 'day')){
                         setStartDay(date);
                         setEndDay(date);
-                        //console.log('single start: ', date)
-                        //console.log('single end: ', date)
                     }
                 }
-                /* console.log(date)
-                console.log('can select ', canSelect)
-                console.log('single date and is start', (selectedEndDay == null && selectedStartDay != null && date == selectedStartDay))
-                console.log('selected start', selectedStartDay)
-                console.log('selected end', selectedEndDay)
-                console.log('this == start', moment(date).isSame(selectedStartDay))
-                console.log('multi date and between', (selectedStartDay != null && selectedEndDay != null && date >= selectedStartDay && date <= selectedEndDay))
-                console.log(canSelect && ((selectedEndDay == null && selectedStartDay != null && moment(date).isSame(selectedStartDay)) || (selectedStartDay != null && selectedEndDay != null && moment(date).isSameOrAfter(selectedStartDay) && moment(date).isSameOrBefore(selectedEndDay)))) */
             }
-            setIsSelected(canSelect && ((selectedEndDay == null && selectedStartDay != null && moment(date).isSame(selectedStartDay)) || (selectedStartDay != null && selectedEndDay != null && moment(date).isSameOrAfter(selectedStartDay) && moment(date).isSameOrBefore(selectedEndDay))))
+
+            const isStartDay = selectedEndDay == null && selectedStartDay != null && utcSelectedStart != null && utcDate.isSame(utcSelectedStart, 'day');
+            const isWithinRange = selectedStartDay != null && selectedEndDay != null && utcSelectedStart != null && utcSelectedEnd != null && utcDate.isSameOrAfter(utcSelectedStart, 'day') && utcDate.isSameOrBefore(utcSelectedEnd, 'day');
+            setIsSelected(canSelect && (isStartDay || isWithinRange));
         }
     }, [selectableDateRange, selectedStartDay, selectedEndDay])
 
@@ -149,5 +132,5 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     onMouseOver={(e)=>setMouseOver(date)}
     onTouchMove={(e)=>{document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)?.dispatchEvent(new Event('sim-over'))}}
     onDrag={(e)=>{e.preventDefault()}}
-    >{new Date(date).getDate() }</div>
+    >{moment.utc(date).date()}</div>
 }

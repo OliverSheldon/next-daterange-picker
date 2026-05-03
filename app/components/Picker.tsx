@@ -1,6 +1,6 @@
 'use client'
 
-import { MutableRefObject, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as Moment from 'moment';
 import { DateRange, extendMoment } from 'moment-range';
 const moment = extendMoment(Moment);
@@ -24,6 +24,9 @@ type Props = {
     pickerDates: Date[][],
     getSelectedDates: Function | undefined
 }
+
+const utcDate = (date: Date | null | undefined) => date ? moment.utc(date).startOf('day') : null;
+const utcDateObject = (date: Date | null | undefined) => date ? moment.utc(date).startOf('day').toDate() : null;
 
 export default function Picker({initDate, dateStates, monthDates, monthStart, monthEnd, monthDates2, monthStart2, monthEnd2, pickerDates, getSelectedDates = undefined} : Props) {
 
@@ -53,25 +56,22 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
 
   const mouseDown = (date: Date) =>
   {
-    //console.log('down ', date)
     reset();
-    setSelectedStartDay(date);
+    setSelectedStartDay(utcDateObject(date));
     normaliseDates();
     setIsMouseDown(true);
   }
 
   const mouseOver = (date: Date) => {
-    //console.log('over ', date)
     if(isMouseDown){
-      setSelectedEndDay(date);
+      setSelectedEndDay(utcDateObject(date));
       normaliseDates();
     }
   }
 
   const mouseUp = (date: Date) =>
   {
-    //console.log('up ', date)
-    setSelectedEndDay(date);
+    setSelectedEndDay(utcDateObject(date));
     normaliseDates();
     setIsMouseDown(false);
     setSelectedStartDay(null);
@@ -79,29 +79,31 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   }
 
   const updateStartDay = (date: Date | null) => {
-    //console.log(date)
-    setStartDay(date)
+    setStartDay(utcDateObject(date));
   }
 
   const updateEndDay = (date: Date | null) => {
-    setEndDay(date)
+    setEndDay(utcDateObject(date));
   }
 
   const normaliseDates = () => {
     if(selectedStartDay != null && selectedEndDay == null){
-      setNormalisedStartDay(selectedStartDay);
+      setNormalisedStartDay(utcDateObject(selectedStartDay));
+      setNormalisedEndDay(null);
     }
     else if(selectedStartDay != null && selectedEndDay != null){
-      if(selectedStartDay < selectedEndDay){
-        setNormalisedStartDay(selectedStartDay);
-        setNormalisedEndDay(selectedEndDay);
+      const utcStart = utcDate(selectedStartDay)!;
+      const utcEnd = utcDate(selectedEndDay)!;
+      if(utcStart.isBefore(utcEnd)){
+        setNormalisedStartDay(utcStart.toDate());
+        setNormalisedEndDay(utcEnd.toDate());
       }
       else{
-        setNormalisedStartDay(selectedEndDay);
-        setNormalisedEndDay(selectedStartDay);
+        setNormalisedStartDay(utcEnd.toDate());
+        setNormalisedEndDay(utcStart.toDate());
       }
     }
-    else if(selectedStartDay == null && selectedEndDay == null){
+    else{
         setNormalisedStartDay(null);
         setNormalisedEndDay(null);
     }
@@ -110,52 +112,43 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
   const configureSelectedStart = (date: Date | null) =>{
     if(dateStates != null && dateStates != undefined && dateStates.length > 0){
       if(date != null){
+          const utcSelected = utcDate(date)!;
           for(var x=0; x < dateStates.length; x++){
+            const utcRangeStart = moment.utc(dateStates[x].range.start).startOf('day');
+            const utcRangeEnd = moment.utc(dateStates[x].range.end).endOf('day');
             if(dateStates.length == 1)
             {
-              if(moment(date).isBefore(moment(dateStates[x].range.start))){
-                setSelectableDateRange(new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
-                //console.log('Before Range',new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+              if(utcSelected.isBefore(utcRangeStart)){
+                setSelectableDateRange(new DateRange(pickerDates[0][0], utcRangeStart.clone().add(-1, 'days').startOf('day').toDate()))
               }
               else{
-                setSelectableDateRange(new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
-                //console.log('After Range',new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
+                setSelectableDateRange(new DateRange(utcRangeEnd.clone().add(1, 'days').startOf('day').toDate(), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
               }
             }
             else{
               if(x==0){
-                  if(moment(date).isBefore(moment(dateStates[x].range.start))){
-                      setSelectableDateRange(new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
-                      //console.log('1st range ',new DateRange(pickerDates[0][0], moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+                  if(utcSelected.isBefore(utcRangeStart)){
+                      setSelectableDateRange(new DateRange(pickerDates[0][0], utcRangeStart.clone().add(-1, 'days').startOf('day').toDate()))
                   }
               }
               else{
-                if(moment(date).isBetween(dateStates[x-1].range.end,dateStates[x].range.start)){
-                  //console.log(x, dateStates.length -2)
-                  //console.log('mid range ',moment(dateStates[x-1].range.end).endOf('day'),moment(dateStates[x].range.start).add(-1, 'days').startOf('day'))
-                  setSelectableDateRange(new DateRange(moment(dateStates[x-1].range.end).add(1, 'days').startOf('day'), moment(dateStates[x].range.start).add(-1, 'days').startOf('day')))
+                const previousRangeEnd = moment.utc(dateStates[x-1].range.end).endOf('day');
+                if(utcSelected.isBetween(previousRangeEnd, utcRangeStart)){
+                  setSelectableDateRange(new DateRange(previousRangeEnd.clone().add(1, 'days').startOf('day').toDate(), utcRangeStart.clone().add(-1, 'days').startOf('day').toDate()))
                 }
                 else{
-                  if(moment(date).isBetween(dateStates[x].range.end, moment(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).add(1, 'days').startOf('day'))){
-                    setSelectableDateRange(new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), moment(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).add(1, 'days').startOf('day')))
-                    //console.log('end range ',new DateRange(moment(dateStates[x].range.end).add(1, 'days').startOf('day'), pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
+                  const lastPickerDate = moment.utc(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).startOf('day');
+                  if(utcSelected.isBetween(utcRangeEnd, lastPickerDate.clone().add(1, 'days').startOf('day'))){
+                    setSelectableDateRange(new DateRange(utcRangeEnd.clone().add(1, 'days').startOf('day').toDate(), lastPickerDate.clone().add(1, 'days').startOf('day').toDate()))
                   }
-                  /* else{
-                    
-                    setSelectableDateRange(null)
-                  } */
                 }
               }
             }
           }
       }
-      /* else{
-        console.log('here')
-        setSelectableDateRange(null)
-      } */
     }
     else{
-        setSelectableDateRange(new DateRange(pickerDates[0][0],pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
+        setSelectableDateRange(new DateRange(pickerDates[0][0], pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]))
     }
   }
 
