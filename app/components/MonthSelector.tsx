@@ -11,16 +11,16 @@ type Props = {
 }
 
 export default function MonthSelector({initDate, setDate, earlierMonthsSelectable, showTwoMonths} : Props) {
-    let [chosenDate, setChosenDate] = useState<Date>(moment.utc(initDate).startOf('day').toDate())
+    let [chosenDate, setChosenDate] = useState<Date>(moment(initDate).startOf('day').toDate())
 
     const updateDate = (direction: string) => {
-        let date: Date = moment.utc(initDate).startOf('month').toDate();
+        let date: Date = moment(initDate).startOf('month').toDate();
         switch(direction){
             case "Left":
-                date = moment.utc(initDate).add(-1, 'month').startOf('month').toDate();                
+                date = moment(initDate).add(-1, 'month').startOf('month').toDate();                
                 break;
             case "Right":
-                date = moment.utc(initDate).add(1, 'month').startOf('month').toDate();
+                date = moment(initDate).add(1, 'month').startOf('month').toDate();
                 break;
         }
         setChosenDate(date)
@@ -29,10 +29,10 @@ export default function MonthSelector({initDate, setDate, earlierMonthsSelectabl
 
     return(
         <div className="controls">
-            <button type="button" disabled={!earlierMonthsSelectable && moment.utc(chosenDate).startOf('month').isSame(moment.utc().startOf('month'))} onClick={()=>updateDate('Left')}>{'<'}</button>
+            <button type="button" disabled={!earlierMonthsSelectable && moment(chosenDate).startOf('month').isSame(moment().startOf('month'))} onClick={()=>updateDate('Left')}>{'<'}</button>
             <div className={`monthHeader ${!showTwoMonths && 'single'}`}>
-                <span>{moment.utc(chosenDate).format('MMM YYYY')}</span>
-                {showTwoMonths && <span>{moment.utc(chosenDate).add(1, 'month').format('MMM YYYY')}</span>}
+                <span>{moment(chosenDate).format('MMM YYYY')}</span>
+                {showTwoMonths && <span>{moment(chosenDate).add(1, 'month').format('MMM YYYY')}</span>}
             </div>
             <button type="button" onClick={()=>updateDate('Right')}>{'>'}</button>
         </div>

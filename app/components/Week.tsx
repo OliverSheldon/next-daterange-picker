@@ -32,7 +32,7 @@ type Props = {
 
 export default function Week({mouseDown, mouseUp, mouseOver, dates, monthStart, monthEnd, dateStates, selectedStartDay, selectedEndDay, setStartDay, setEndDay, monthDates, selectableDateRange, setLastTouched, lastTouched} : Props) {
     const belongsToMonth = (date: Date) : boolean =>{
-        return moment.utc(date).isSameOrAfter(moment.utc(monthStart), 'day') && moment.utc(date).isSameOrBefore(moment.utc(monthEnd), 'day')
+        return moment(date).isSameOrAfter(moment(monthStart), 'day') && moment(date).isSameOrBefore(moment(monthEnd), 'day')
     }   
 
     return (    

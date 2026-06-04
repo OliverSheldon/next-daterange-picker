@@ -25,8 +25,8 @@ type Props = {
     getSelectedDates: Function | undefined
 }
 
-const utcDate = (date: Date | null | undefined) => date ? moment.utc(date).startOf('day') : null;
-const utcDateObject = (date: Date | null | undefined) => date ? moment.utc(date).startOf('day').toDate() : null;
+const utcDate = (date: Date | null | undefined) => date ? moment(date).startOf('day') : null;
+const utcDateObject = (date: Date | null | undefined) => date ? moment(date).startOf('day').toDate() : null;
 
 export default function Picker({initDate, dateStates, monthDates, monthStart, monthEnd, monthDates2, monthStart2, monthEnd2, pickerDates, getSelectedDates = undefined} : Props) {
 
@@ -114,8 +114,8 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
       if(date != null){
           const utcSelected = utcDate(date)!;
           for(var x=0; x < dateStates.length; x++){
-            const utcRangeStart = moment.utc(dateStates[x].range.start).startOf('day');
-            const utcRangeEnd = moment.utc(dateStates[x].range.end).endOf('day');
+            const utcRangeStart = moment(dateStates[x].range.start).startOf('day');
+            const utcRangeEnd = moment(dateStates[x].range.end).endOf('day');
             if(dateStates.length == 1)
             {
               if(utcSelected.isBefore(utcRangeStart)){
@@ -132,12 +132,12 @@ export default function Picker({initDate, dateStates, monthDates, monthStart, mo
                   }
               }
               else{
-                const previousRangeEnd = moment.utc(dateStates[x-1].range.end).endOf('day');
+                const previousRangeEnd = moment(dateStates[x-1].range.end).endOf('day');
                 if(utcSelected.isBetween(previousRangeEnd, utcRangeStart)){
                   setSelectableDateRange(new DateRange(previousRangeEnd.clone().add(1, 'days').startOf('day').toDate(), utcRangeStart.clone().add(-1, 'days').startOf('day').toDate()))
                 }
                 else{
-                  const lastPickerDate = moment.utc(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).startOf('day');
+                  const lastPickerDate = moment(pickerDates[pickerDates.length-1][pickerDates[pickerDates.length-1].length-1]).startOf('day');
                   if(utcSelected.isBetween(utcRangeEnd, lastPickerDate.clone().add(1, 'days').startOf('day'))){
                     setSelectableDateRange(new DateRange(utcRangeEnd.clone().add(1, 'days').startOf('day').toDate(), lastPickerDate.clone().add(1, 'days').startOf('day').toDate()))
                   }

@@ -33,12 +33,12 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
         let result = false;
 
         if (Array.isArray(dateStates)) {
-            const target = moment.utc(date);
+            const target = moment(date).startOf('day');
 
             dateStates.forEach((element) => {
                 if (element.state === "unavailable") {
-                    const start = moment.utc(element.range.start).startOf('day');
-                    const end = moment.utc(element.range.end).endOf('day');
+                    const start = moment(element.range.start).startOf('day');
+                    const end = moment(element.range.end).endOf('day');
 
                     if (
                         target.isSameOrAfter(start, 'day') &&
@@ -77,11 +77,11 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     useEffect(() => {
         if(selectableDateRange != null){
             let canSelect = false;
-            const utcDate = moment.utc(date).startOf('day');
-            const utcRangeStart = moment.utc(selectableDateRange.start).startOf('day');
-            const utcRangeEnd = moment.utc(selectableDateRange.end).endOf('day');
-            const utcSelectedStart = selectedStartDay ? moment.utc(selectedStartDay).startOf('day') : null;
-            const utcSelectedEnd = selectedEndDay ? moment.utc(selectedEndDay).startOf('day') : null;
+            const utcDate = moment(date).startOf('day');
+            const utcRangeStart = moment(selectableDateRange.start).startOf('day');
+            const utcRangeEnd = moment(selectableDateRange.end).endOf('day');
+            const utcSelectedStart = selectedStartDay ? moment(selectedStartDay).startOf('day') : null;
+            const utcSelectedEnd = selectedEndDay ? moment(selectedEndDay).startOf('day') : null;
 
             if(selectedStartDay != null && selectedEndDay == null){
                 if(utcDate.isSameOrAfter(utcRangeStart, 'day') && utcDate.isSameOrBefore(utcRangeEnd, 'day')){
@@ -97,7 +97,7 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
             if(canSelect){
                 if(utcSelectedStart != null && utcSelectedEnd != null){
                     if(utcSelectedStart.isBefore(utcRangeStart, 'day')){
-                        setStartDay(moment.utc(selectableDateRange.start).startOf('day').toDate());
+                        setStartDay(moment(selectableDateRange.start).startOf('day').toDate());
                     }
 
                     if(utcDate.isSame(utcSelectedStart, 'day')){
@@ -132,5 +132,5 @@ export default function Day({date, mouseUp, mouseDown, setMouseOver, belongsToMo
     onMouseOver={(e)=>setMouseOver(date)}
     onTouchMove={(e)=>{document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)?.dispatchEvent(new Event('sim-over'))}}
     onDrag={(e)=>{e.preventDefault()}}
-    >{moment.utc(date).date()}</div>
+    >{moment(date).date()}</div>
 }
